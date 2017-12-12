@@ -45,9 +45,9 @@ public class FloatView {
         //如果悬浮窗图片为透明图片,需要设置该参数为 PixelFormat.RGBA_8888
         mWindowLayoutParams.format = PixelFormat.RGBA_8888;
         //设置悬浮窗的宽度
-        mWindowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowLayoutParams.width = 1;
         //设置悬浮窗的高度
-        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowLayoutParams.height = 1;
         //设置悬浮窗的布局
         mEditText = (EditText) LayoutInflater.from(context).inflate(R.layout.layout_float, null);
 
