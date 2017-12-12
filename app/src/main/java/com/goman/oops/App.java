@@ -10,10 +10,14 @@ public class App extends Application {
 
     private static App sContext;
 
+    ScannerFloatView mFloatView = new ScannerFloatView();
+
     @Override
     public void onCreate() {
         super.onCreate();
         sContext = (App) getApplicationContext();
+
+        mFloatView.init(sContext);
     }
 
     public static App getContext(){
