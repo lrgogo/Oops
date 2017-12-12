@@ -60,29 +60,16 @@ public class FloatView {
                     //Process.killProcess(Process.myPid());
                     return true;
                 }
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                    String code = mEditText.getText().toString();
+                    Log.e("floatview", code);
+                    mEditText.setText("");
+                    return true;
+                }
                 return false;
             }
         });
 
-        mEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String code = s.toString();
-                if (code.endsWith("\r\n")){
-                    Log.e("floatview", code);
-                }
-            }
-        });
     }
 
     public void show(){
