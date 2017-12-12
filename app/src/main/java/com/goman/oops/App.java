@@ -17,7 +17,7 @@ public class App extends Application {
         super.onCreate();
         sContext = (App) getApplicationContext();
 
-        mFloatView.init(sContext);
+        //mFloatView.init(sContext);
     }
 
     public static App getContext(){

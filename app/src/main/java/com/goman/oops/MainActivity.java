@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -56,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                                         // 遍历然后打印出每个设备的信息
                                         Log.e("MainActivity", device.getName() + "\n" + device.getAddress());
                                         ParcelUuid[] uuids = device.getUuids();
-
                                         acceptThread = new AcceptThread(uuids[0].getUuid());
                                         acceptThread.start();
                                     }
@@ -77,6 +77,38 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private static final int TYPE_RFCOMM = 1;
+    private static final int TYPE_SCO = 2;
+    private static final int TYPE_L2CAP = 3;
+
+    /**
+     * Create a BluetoothSocket using L2CAP protocol
+     * Useful for HID Bluetooth devices
+     * @return BluetoothSocket
+     */
+    private static BluetoothSocket createL2CAPBluetoothSocket(BluetoothDevice device, UUID id){
+        int type        = TYPE_L2CAP; // L2CAP protocol
+        int fd          = -1;         // Create a new socket
+        boolean auth    = false;      // No authentication
+        boolean encrypt = false;      // Not encrypted
+        int port        = 0;          // port to use (useless if UUID is given)
+        ParcelUuid uuid = new ParcelUuid(id); // Bluetooth UUID service
+
+        try {
+            Constructor<BluetoothSocket> constructor = BluetoothSocket.class.getDeclaredConstructor(
+                    int.class, int.class, boolean.class, boolean.class,
+                    BluetoothDevice.class, int.class, ParcelUuid.class);
+            constructor.setAccessible(true);
+            BluetoothSocket clientSocket = (BluetoothSocket) constructor.newInstance(
+                    type, fd, auth, encrypt, device, port, uuid);
+            return clientSocket;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
