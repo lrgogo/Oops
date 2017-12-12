@@ -56,8 +56,6 @@ public class FloatView {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
                     App.getContext().backPressResumeActivity();
-                    //unbind();
-                    //Process.killProcess(Process.myPid());
                     return true;
                 }
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
