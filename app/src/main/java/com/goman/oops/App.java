@@ -3,6 +3,7 @@ package com.goman.oops;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 /**
  * Created by lingrui on 2017/12/6.
@@ -38,11 +39,13 @@ public class App extends Application {
             @Override
             public void onActivityResumed(Activity activity) {
                 mResumeActivity = activity;
+                mFloatView.show();
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
                 mResumeActivity = null;
+                mFloatView.cancel();
             }
 
             @Override

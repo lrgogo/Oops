@@ -2,7 +2,9 @@ package com.goman.oops;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.os.Process;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,14 +20,16 @@ public class FloatView {
 
     WindowManager mWindowManager;
 
-    EditText floatWindowView;
+    WindowManager.LayoutParams mWindowLayoutParams;
+
+    EditText mEditText;
 
     public void init(Context context){
         //Activity中的方法,得到窗口管理器
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         //设置悬浮窗布局属性
-        WindowManager.LayoutParams mWindowLayoutParams = new WindowManager.LayoutParams();
+        mWindowLayoutParams = new WindowManager.LayoutParams();
         //设置类型,具体有哪些值可取在后面附上
         mWindowLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         //设置行为选项,具体有哪些值可取在后面附上
@@ -45,27 +49,50 @@ public class FloatView {
         //设置悬浮窗的高度
         mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         //设置悬浮窗的布局
-        floatWindowView = (EditText) LayoutInflater.from(context).inflate(R.layout.layout_float, null);
-        floatWindowView.requestFocus();
-        //加载显示悬浮窗
-        mWindowManager.addView(floatWindowView, mWindowLayoutParams);
+        mEditText = (EditText) LayoutInflater.from(context).inflate(R.layout.layout_float, null);
 
-        floatWindowView.setOnKeyListener(new View.OnKeyListener() {
+        mEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
                     App.getContext().backPressResumeActivity();
-                    unbind();
-                    Process.killProcess(Process.myPid());
+                    //unbind();
+                    //Process.killProcess(Process.myPid());
                     return true;
                 }
                 return false;
             }
         });
+
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String code = s.toString();
+                if (code.endsWith("\r\n")){
+                    Log.e("floatview", code);
+                }
+            }
+        });
     }
 
-    public void unbind(){
-        mWindowManager.removeView(floatWindowView);
+    public void show(){
+        //加载显示悬浮窗
+        mWindowManager.addView(mEditText, mWindowLayoutParams);
+    }
+
+    public void cancel(){
+        mEditText.setText("");
+        mWindowManager.removeView(mEditText);
     }
 
 }
